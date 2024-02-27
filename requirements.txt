@@ -1,0 +1,7 @@
+tensorflow
+json
+string
+random
+nltk
+pandas
+joblib
