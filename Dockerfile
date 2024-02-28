@@ -36,10 +36,13 @@
 
 # app/Dockerfile
 
+# Use an official Python runtime as a parent image
 FROM python:3.9-slim
 
+# Set the working directory to /app
 WORKDIR /app
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     build-essential \
     curl \
@@ -47,12 +50,17 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
+# Clone your project from GitHub
 RUN git clone https://github.com/thiawndoumbe/Projet_NLP.git .
 
-RUN pip3 install -r requirements.txt
+# Install Python dependencies
+RUN pip install --no-cache-dir -r requirements.txt
 
-EXPOSE 8501
+# Expose the port that FastAPI will run on
+EXPOSE 8000
 
-HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
+# Set the environment variable for the FastAPI application
+ENV UVICORN_CMD="uvicorn app:app --host 0.0.0.0 --port 8000 --reload"
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+# Start the FastAPI application
+CMD ["bash", "-c", "$UVICORN_CMD"]
