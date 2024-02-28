@@ -1,8 +1,7 @@
 tensorflow
-string
-random
 nltk
 pandas
 joblib
+
 
 
